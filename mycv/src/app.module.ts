@@ -15,7 +15,7 @@ import { Report } from './reports/reports.entity';
       type: 'sqlite',
       database: 'db.sqlite',
       entities: [User, Report],
-      synchronize: true,
+      synchronize: true, //apenas para ambiente de desenvolvimento. Observa a estrutura das entidades e atualiza automaticamente o banco
     }),
   ],
   controllers: [AppController],
