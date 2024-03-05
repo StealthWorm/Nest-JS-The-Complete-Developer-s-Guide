@@ -8,23 +8,29 @@ import {
   Query,
   Delete,
   NotFoundException,
-  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from './dtos/user.dto';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
+@Serialize(UserDto) // aplica o interceptor criado para todas as rotas, mas ainda é possivel definir um por rota
 export class UsersController {
-  constructor(private usersService: UsersService) { }
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) { }
 
   @Post('/signup')
   createUser(@Body() body: CreateUserDto) {
-    this.usersService.create(body.email, body.password);
+    return this.authService.signUp(body.email, body.password);
   }
 
-  @UseInterceptors(SerializeInterceptor) //serve para iterceptar a resposta
+  // @UseInterceptors(new SerializeInterceptor(UserDto)) //serve para iterceptar a resposta
+  // @Serialize(UserDto) //shorthand para o método acima, declarando uma função que faz a mesma coisa dentro do Interceptor
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));
