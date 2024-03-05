@@ -16,6 +16,7 @@ export class User {
   email: string;
 
   @Column()
+  // @Exclude()
   password: string;
 
   // um hook do typrm para realziar uma ação após detectar um insert em uma tabela
