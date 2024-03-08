@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
   NotFoundException,
+  Session,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
@@ -24,9 +25,29 @@ export class UsersController {
     private authService: AuthService,
   ) { }
 
+  @Get('/whoami')
+  whoAmI(@Session() session: any) {
+    return this.usersService.findOne(session.userId);
+  }
+
   @Post('/signup')
-  createUser(@Body() body: CreateUserDto) {
-    return this.authService.signUp(body.email, body.password);
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signUp(body.email, body.password);
+
+    session.userId = user.id;
+
+    return user;
+  }
+
+  @Post('/signin')
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+    // é possivel que, ao chamar o sign in, ele nao retorne nenhum header com o session, pois após cadastrar, caso
+    // não existam alterações no conteudo da sessão ele não reenvia no header
+    const user = await this.authService.signIn(body.email, body.password);
+
+    session.userId = user.id;
+
+    return user;
   }
 
   // @UseInterceptors(new SerializeInterceptor(UserDto)) //serve para iterceptar a resposta
@@ -56,4 +77,15 @@ export class UsersController {
   updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.usersService.update(parseInt(id), body);
   }
+
+  // exemplo de como o cookie pode ser salvo e resgatado
+  // @Get('colors/:color')
+  // setColor(@Param('color') color: string, @Session() session: any) {
+  //   session.color = color;
+  // }
+
+  // @Get('colors/')
+  // getColor(@Session() session: any) {
+  //   return session.color;
+  // }
 }
