@@ -11,7 +11,7 @@ const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) { }
+  constructor(private userService: UsersService) {}
 
   async signUp(email: string, password: string) {
     // see if email is in use
