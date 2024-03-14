@@ -17,6 +17,12 @@ async function bootstrap() {
       whitelist: true, // essa linha garante que o corpo das requisições não possua divergencias com os DTOs, nao possuo propriedades faltando ou a mais
     }),
   );
+  (app as any).set('etag', false);
+  app.use((req, res, next) => {
+    res.removeHeader('x-powered-by');
+    res.removeHeader('date');
+    next();
+  });
   await app.listen(3000);
 }
 bootstrap();

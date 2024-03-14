@@ -1,25 +1,25 @@
 import {
   Body,
   Controller,
+  Post,
   Get,
   Patch,
-  Post,
+  Delete,
   Param,
   Query,
-  Delete,
   NotFoundException,
   Session,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UsersService } from './users.service';
+import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './users.entity';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('auth')
 @Serialize(UserDto) // aplica o interceptor criado para todas as rotas, mas ainda é possivel definir um por rota
@@ -36,7 +36,7 @@ export class UsersController {
 
   @Get('/whoami')
   @UseGuards(AuthGuard)
-  // O Current user só é chamado após tratar o Interceptor, por isso garantimos queele ira retornar o user
+  // O Current user só é chamado após tratar o Interceptor, por isso garantimos que ele ira retornar o user
   whoAmI(@CurrentUser() user: User) {
     return user;
   }
@@ -57,7 +57,7 @@ export class UsersController {
   }
 
   @Post('/signin')
-  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+  async signIn(@Body() body: CreateUserDto, @Session() session: any) {
     // é possivel que, ao chamar o sign in, ele nao retorne nenhum header com o session, pois após cadastrar, caso
     // não existam alterações no conteudo da sessão ele não reenvia no header
     const user = await this.authService.signIn(body.email, body.password);

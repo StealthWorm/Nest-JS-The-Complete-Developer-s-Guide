@@ -8,7 +8,7 @@ import { UsersService } from '../users.service';
 
 @Injectable() //como queremos que ele participe do ciclo de Injenção de Dependencia, precisamos desse decorator
 export class CurrentUserInterceptor implements NestInterceptor {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) { }
 
   async intercept(context: ExecutionContext, handler: CallHandler) {
     const request = context.switchToHttp().getRequest();
