@@ -7,20 +7,36 @@ import { ReportsModule } from './reports/reports.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
 import { Report } from './reports/reports.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookieSession = require('cookie-session');
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, //indica que sera global, não precisando reimportar entre módulos
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+    }),
     UsersModule,
     ReportsModule,
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
-      entities: [User, Report],
-      synchronize: true, //apenas para ambiente de desenvolvimento. Observa a estrutura das entidades e atualiza automaticamente o banco
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService], //injetamos no modulo do ORM o condigService que tem acesso ao ".env"
+      useFactory: (config: ConfigService) => {
+        return {
+          type: 'sqlite',
+          database: config.get<string>('DB_NAME'),
+          entities: [User, Report],
+          synchronize: true, //apenas para ambiente de desenvolvimento. Observa a estrutura das entidades e atualiza automaticamente o banco
+        };
+      },
     }),
+    // TypeOrmModule.forRoot({
+    //   type: 'sqlite',
+    //   database: 'db.sqlite',
+    //   entities: [User, Report],
+    //   synchronize: true, //apenas para ambiente de desenvolvimento. Observa a estrutura das entidades e atualiza automaticamente o banco
+    // }),
   ],
   controllers: [AppController],
   providers: [
