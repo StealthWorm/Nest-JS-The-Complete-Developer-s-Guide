@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/users.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Report {
@@ -7,4 +8,26 @@ export class Report {
 
   @Column()
   price: number;
+
+  @Column()
+  make: string;
+
+  @Column()
+  model: string;
+
+  @Column()
+  year: number;
+
+  @Column()
+  lng: number;
+
+  @Column()
+  lat: number;
+
+  @Column()
+  mileage: number;
+
+  // ManyToOne altera a tabela atual, criando uma coluna user_id que vincula o usuário que criou o relatório
+  @ManyToOne(() => User, (user) => user.reports)
+  user: User;
 }
