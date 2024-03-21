@@ -21,6 +21,9 @@ export class User {
   // @Exclude()
   password: string;
 
+  @Column({ default: true })
+  admin: boolean;
+
   /*  
   OneToMany não altera a tabela onde é declarado, é criada uma associação em "user.reports"
   O motivo de envolvermos o "report" em uma function é pelo fato de existir uma dependencia 

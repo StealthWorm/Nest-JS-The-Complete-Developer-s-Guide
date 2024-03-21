@@ -4,6 +4,7 @@ import { User } from 'src/users/users.entity';
 // utiliza o ValidationPipe para validar o payload das requisições
 export class ReportDto {
   @Expose()
+  @Expose()
   id: number;
   @Expose()
   price: number;
@@ -19,6 +20,8 @@ export class ReportDto {
   model: string;
   @Expose()
   mileage: number;
+  @Expose()
+  approved: boolean;
 
   @Transform(({ obj }) => obj.user.id) //vai buscar uma propriedade usuário e vai extrair somente o id
   @Expose()

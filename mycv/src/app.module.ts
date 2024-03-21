@@ -51,7 +51,7 @@ const cookieSession = require('cookie-session');
   ],
 })
 export class AppModule {
-  // essa config será chamada automaticamente sempre que nosso app começar a escutar o trafego de entrada
+  // essa config será chamada automaticamente sempre que nosso app começar a escutar o trafego de entrada, para todas as rotas
   //  com ela conseguimos instanciar o middleware junto com o contexto do app para utilizar nos testes e2e
   configure(consumer: MiddlewareConsumer) {
     consumer

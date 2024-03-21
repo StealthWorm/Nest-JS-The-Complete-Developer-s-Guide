@@ -28,7 +28,7 @@ export class UsersController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
-  ) {}
+  ) { }
   // @Get('/whoami')
   // whoAmI(@Session() session: any) {
   //   return this.usersService.findOne(session.userId);
@@ -100,7 +100,6 @@ export class UsersController {
   // setColor(@Param('color') color: string, @Session() session: any) {
   //   session.color = color;
   // }
-
   // @Get('colors/')
   // getColor(@Session() session: any) {
   //   return session.color;
