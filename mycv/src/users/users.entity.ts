@@ -1,4 +1,3 @@
-import { Report } from 'src/reports/reports.entity';
 import {
   Entity,
   Column,
@@ -8,6 +7,7 @@ import {
   AfterUpdate,
   OneToMany,
 } from 'typeorm';
+import { Report } from '../reports/reports.entity';
 
 @Entity()
 export class User {

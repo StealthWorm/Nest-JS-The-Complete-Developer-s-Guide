@@ -27,7 +27,10 @@ const cookieSession = require('cookie-session');
           type: 'sqlite',
           database: config.get<string>('DB_NAME'),
           entities: [User, Report],
-          synchronize: true, //apenas para ambiente de desenvolvimento. Observa a estrutura das entidades e atualiza automaticamente o banco
+          //! apenas para ambiente de DEV. Observa a estrutura das entidades e atualiza automaticamente o banco
+          //! pode ser perigoso de usar em ambiente de produção, uma vez que reflete imediatamente as mudanças, podemos apagar dados importantes
+          // ! antes de mandar para produção, definir como FALSE
+          synchronize: true,
         };
       },
     }),
@@ -51,13 +54,14 @@ const cookieSession = require('cookie-session');
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) { }
   // essa config será chamada automaticamente sempre que nosso app começar a escutar o trafego de entrada, para todas as rotas
   //  com ela conseguimos instanciar o middleware junto com o contexto do app para utilizar nos testes e2e
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         cookieSession({
-          keys: ['jkasy7ias6as'],
+          keys: [this.configService.get('COOKIE_KEY')],
         }),
       )
       .forRoutes('*'); //definir as rotas que vão usar esse middleware

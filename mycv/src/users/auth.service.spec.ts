@@ -33,7 +33,7 @@ describe('AuthService', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        AuthService, // nesse caso precisa passar o AuthService pois esamos dando um module.get() diretamente para testar esse serviço
+        AuthService, // nesse caso precisa passar o AuthService pois estamos dando um module.get() diretamente para testar esse serviço
         //  essa linha significa "sempre que for requisitado uma instancia de UsersService, forneça os valores de "fakeUsersService""
         { provide: UsersService, useValue: fakeUsersService },
       ],
