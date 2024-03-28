@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
 import { Report } from './reports/reports.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmConfigService } from './config/typeorm.config';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookieSession = require('cookie-session');
@@ -18,22 +19,25 @@ const cookieSession = require('cookie-session');
       isGlobal: true, //indica que sera global, não precisando reimportar entre módulos
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+    }),
     UsersModule,
     ReportsModule,
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService], //injetamos no modulo do ORM o condigService que tem acesso ao ".env"
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          entities: [User, Report],
-          //! apenas para ambiente de DEV. Observa a estrutura das entidades e atualiza automaticamente o banco
-          //! pode ser perigoso de usar em ambiente de produção, uma vez que reflete imediatamente as mudanças, podemos apagar dados importantes
-          // ! antes de mandar para produção, definir como FALSE
-          synchronize: true,
-        };
-      },
-    }),
+    // TypeOrmModule.forRootAsync({
+    //   inject: [ConfigService], //injetamos no modulo do ORM o condigService que tem acesso ao ".env"
+    //   useFactory: (config: ConfigService) => {
+    //     return {
+    //       type: 'sqlite',
+    //       database: config.get<string>('DB_NAME'),
+    //       entities: [User, Report],
+    //       //! synchronize true apenas para ambiente de DEV. Observa a estrutura das entidades e atualiza automaticamente o banco
+    //       //! pode ser perigoso de usar em ambiente de produção, uma vez que reflete imediatamente as mudanças, podemos apagar dados importantes
+    //       //! antes de mandar para produção, definir como FALSE
+    //       synchronize: false,
+    //     };
+    //   },
+    // }),
     // TypeOrmModule.forRoot({
     //   type: 'sqlite',
     //   database: 'db.sqlite',

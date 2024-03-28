@@ -8,7 +8,7 @@ import { AppModule } from './../src/app.module';
   e suas dependencias
 
   existem 2 soluções para isso
-  1 - criar uma função isolada que recebe o "app" do main.ts e executar os mesmoms comandos de atribuição de middlewares
+  1 - criar uma função isolada que recebe o "app" do main.ts e executar os mesmos comandos de atribuição de middlewares
     - desse modo, basta importar essa função "setupApp(app)" dentro do main.ts e ele continuará funcionando
     - no arquivo de testes e2e,após a criação "app = moduleFixture.createNestApplication();", bastaria chamar essa mesma função setupApp(app)
 
