@@ -35,9 +35,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         url: process.env.DATABASE_URL,
         autoLoadEntities: true,
         migrationsRun: true,
-        ssl: { // especifico para o heroku
-          rejectUnauthorized: JSON.parse(this.configService.get<string>('SSL')),
-        },
+        // ssl: { // especifico para o heroku
+        //   rejectUnauthorized: JSON.parse(this.configService.get<string>('SSL')),
+        // },
       };
       // console.log(obj);
       return obj;
