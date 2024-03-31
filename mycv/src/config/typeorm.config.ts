@@ -40,7 +40,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         },
       };
       // console.log(obj);
-      // return obj;
+      return obj;
     }
   }
 }
