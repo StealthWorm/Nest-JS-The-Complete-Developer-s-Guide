@@ -15,6 +15,6 @@ async function bootstrap() {
   //   whitelist: true, // essa linha garante que o corpo das requisições não possua divergencias com os DTOs, nao possuo propriedades faltando ou a mais
   // }),
   // );
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
